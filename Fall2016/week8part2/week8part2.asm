@@ -39,9 +39,7 @@ menuLoop:
 	call crlf
 
 	; print the current value as hex here
-	push bytePrecision
-	push offset currentValue
-	call displayAsHexInt
+	call printCurrentValueAsHex
 	
 	mov edx, OFFSET menu ; print the menu
 	call WriteString
@@ -205,15 +203,15 @@ exitProc ENDP
 ; AUTHOR		- JVB
 ; REQUIREMES	- pointer to an array and the current precision in bytes ( the size of the array, as defined by precision variable) 
 ; COMMENT		- JVB:I think I got this right as of 10/17 but if someone wants to check that would be awesome. need to modify his write hex to use the irvine libraries, not printf becasue otherwise we are gonna have problems
-displayAsHexInt PROC
+printCurrentValueAsHex PROC
 	; Function prolog
 	push	ebp
 	mov		ebp, esp
 	push	esi
 
 	; Copy the parameter values into some registers
-	mov		esi, [ebp+8]		; Pointer to array
-	mov		ecx, [ebp+12]		; Size
+	mov		esi, OFFSET currentValue 		; Pointer to array
+	mov		ecx, OFFSET currentPrecision		; Size
 
 	; Have to print in reverse order since little endian
 	add		esi, ecx
@@ -236,7 +234,7 @@ L1:
 	mov		esp, ebp
 	pop		ebp
 	ret
-displayAsHexInt ENDP
+printCurrentValueAsHex ENDP
 
 
 END main
